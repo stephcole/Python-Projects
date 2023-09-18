@@ -3,7 +3,8 @@ from tkinter import*
 import tkinter.filedialog
 import os
 import shutil
-import datetime
+from datetime import datetime, timedelta
+
 
 class ParentWindow(Frame):
     def __init__(self, master):
@@ -70,16 +71,26 @@ class ParentWindow(Frame):
         source = self.source_dir.get()
         #gets destination directory
         destination = self.destination_dir.get()
-        #gets a list of files in the source directory
+        #define an age threshold
+        threshold_age = timedelta(hours=24)
         source_files = os.listdir(source)
-        #creeate 24hour file parameter
-        from datetime import timedelta
-        for files in os.listdir(source):
-            time_format = time.getmtime(os.path.getmtime(files))
-            datetime_object = timedelta.max(days=1)
-            shutil.move(source +'datetime_object' + i, destination)
+        for i in source_files:
+        #gets a list of files in the source directory
+        #runs through each file in source directory
+        #####for i in source_files:
+            file_path = os.path.join(source, i)
+            file_modification_time = datetime.fromtimestamp(os.path.getmtime(file_path))
+            #calculate age of file
+            file_age = datetime.now() - file_modification_time
+            #check if each file is older than 24 hours
+            if file_age < threshold_age:
+                #moves each file from the source to the destination
+                #####shutil.move(x + '/' + i, destination)
+                shutil.move(file_path, os.path.join(destination, i))
+                print(i + ' was successfully transferred.')
+ 
             
-
+        
 
         
     #creates function to exit program
